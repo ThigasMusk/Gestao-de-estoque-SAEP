@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>Gestão de Estoque (Entrada/Saída)</h1>
+
+<div style="background: #eee; padding: 15px; margin-bottom: 20px;">
+    <h3>Registrar Movimentação</h3>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn">Registrar Movimentação</button>
+    </form>
+</div>
+
+<h3>Lista de Produtos (Ordem Alfabética)</h3>
+<table>
+    <thead>
+        <tr>
+            <th>Produto</th>
+            <th>Qtd Atual</th>
+            <th>Estoque Mínimo</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for p in produtos %}
+        <tr {% if p.quantidade < p.estoque_minimo %}style="background-color: #ffdddd;"{% endif %}>
+            <td>{{ p.nome }}</td>
+            <td>{{ p.quantidade }}</td>
+            <td>{{ p.estoque_minimo }}</td>
+            <td>
+                {% if p.quantidade < p.estoque_minimo %}
+                    <b style="color:red;">ABAIXO DO MÍNIMO</b>
+                {% else %}
+                    <span style="color:green;">OK</span>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<hr style="margin: 30px 0;">
+
+<h3>Histórico de Movimentações (Rastreabilidade)</h3>
+<table>
+    <thead>
+        <tr>
+            <th>Data/Hora</th>
+            <th>Responsável</th>
+            <th>Tipo</th>
+            <th>Produto</th>
+            <th>Qtd</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for mov in historico %}
+        <tr>
+            <td>{{ mov.data|date:"d/m/Y H:i" }}</td>
+            <td>{{ mov.responsavel.username }}</td>
+            <td style="font-weight: bold; color: {% if mov.tipo == 'E' %}green{% else %}blue{% endif %};">
+                {{ mov.get_tipo_display }}
+            </td>
+            <td>{{ mov.produto.nome }}</td>
+            <td>{{ mov.quantidade }}</td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="5">Nenhuma movimentação registrada.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

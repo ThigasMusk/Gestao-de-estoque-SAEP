@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>SAEP Estoque</title>
+    <style>
+        body { font-family: sans-serif; margin: 20px; }
+        nav { background: #333; padding: 10px; margin-bottom: 20px; }
+        nav a { color: white; margin-right: 15px; text-decoration: none; }
+        .alert { padding: 10px; margin-bottom: 10px; border: 1px solid #ccc; background: #f0f0f0; }
+        .alert.warning { background: #ffcccc; color: #990000; font-weight: bold; border: 2px solid red; } /* Destaque para o alerta */
+        .alert.success { background: #ccffcc; color: #006600; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background-color: #f2f2f2; }
+        .btn { padding: 5px 10px; background: #007bff; color: white; text-decoration: none; cursor: pointer; }
+        .btn-danger { background: #dc3545; }
+    </style>
+</head>
+<body>
+    {% if user.is_authenticated %}
+    <nav>
+        <span style="color: #ccc;">Olá, {{ user.username }}</span>
+        <a href="{% url 'home' %}">Home</a>
+        <a href="{% url 'produto_lista' %}">Produtos</a>
+        <a href="{% url 'gestao_estoque' %}">Gestão de Estoque</a>
+        <a href="{% url 'logout' %}">Sair</a>
+    </nav>
+    {% endif %}
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert {{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+
+    {% block content %}{% endblock %}
+</body>
+</html>

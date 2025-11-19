@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>Bem-vindo ao Sistema de Estoque SAEP</h1>
+<p></p>
+<div>
+    <a href="{% url 'produto_lista' %}" class="btn">Gerenciar Produtos</a>
+    <a href="{% url 'gestao_estoque' %}" class="btn">Movimentar Estoque</a>
+</div>
+{% endblock %}

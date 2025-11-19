@@ -16,7 +16,25 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from django.contrib.auth import views as auth_views
+from estoque import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    
+    # 4. Autenticação (Login/Logout)
+    path('login/', auth_views.LoginView.as_view(template_name='login.html'), name='login'),
+    path('logout/', auth_views.LogoutView.as_view(next_page='login'), name='logout'),
+    
+    # 5. Principal
+    path('', views.home, name='home'),
+    
+    # 6. Produtos
+    path('produtos/', views.produto_lista, name='produto_lista'),
+    path('produtos/novo/', views.produto_criar, name='produto_criar'),
+    path('produtos/editar/<int:pk>/', views.produto_editar, name='produto_editar'),
+    path('produtos/deletar/<int:pk>/', views.produto_deletar, name='produto_deletar'),
+    
+    # 7. Estoque
+    path('estoque/', views.gestao_estoque, name='gestao_estoque'),
 ]
